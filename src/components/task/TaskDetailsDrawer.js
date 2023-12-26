@@ -1,5 +1,5 @@
 import {Button, Descriptions, Drawer, Form, Input, List, Space, Typography,} from "antd";
-import moment, {Moment} from 'moment';
+import moment from 'moment';
 
 function TaskDetailsDrawer(props) {
     const task = props.task;
@@ -28,13 +28,14 @@ function TaskDetailsDrawer(props) {
                 <Space>
                     <Form name="Добавить комментарий"
                           initialValues={{remember: true}}
-                          onFinish={props.handleCreateTask}
+                          onFinish={props.handleCreateTaskComment}
                     >
-                     <Form.Item>
-                         <Input  showCount maxLength={300} size="medium" placeholder="Введите новый комментарий">
+                        <Form.Item name="commentText"
+                                   rules={[{required: true, message: 'Введите текст комментария!'}]}>
+                            <Input showCount maxLength={300} size="medium" placeholder="Введите новый комментарий">
 
-                        </Input>
-                     </Form.Item>
+                            </Input>
+                        </Form.Item>
                         <Form.Item>
                             <Button style={{width: '100%'}}
                                     type="primary"

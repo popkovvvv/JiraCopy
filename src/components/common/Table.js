@@ -1,4 +1,5 @@
 import {Table} from "antd";
+import React from "react";
 
 function TableComponent(columns, dataSource, rowKey) {
     return (

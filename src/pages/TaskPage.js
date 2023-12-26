@@ -9,7 +9,9 @@ function TaskPage() {
     const [openCreateTaskDrawer, setOpenCreateTaskDrawer] = useState(false);
     const [openTaskDetailsDrawer, setOpenTaskDetailsDrawer] = useState(false);
     const [taskDetails, setTaskDetails] = useState(null);
+
     const [tasks, setTasks] = useState([])
+
     const getTasks = () => {
         fetch('http://localhost:8080/tasks', {
             headers: {
@@ -23,25 +25,37 @@ function TaskPage() {
                 return response.json()
             })
             .then(function (response) {
-                console.log(response)
-                if (response.ok) {
-                    console.log(response)
-                    setTasks(response)
-                } else {
-                    console.log(response.status)
-                }
+                setTasks(response)
             });
     }
+
+    const addCommentToTask = (commentText, authorId, correspondingTask) => {
+        fetch('http://localhost:8080/comments', {
+            headers: {
+                'Content-Type': 'application/json',
+                //'Access-Control-Allow-Origin': '*'
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                commentText,
+                author: authorId,
+                correspondingTask
+            })
+
+        }).then(async function (response) {
+            console.log("Добавили коммент")
+        })
+    }
+
     useEffect(() => {
-
-        console.log(tasks)
         getTasks()
+    }, []);
 
-    });
     const showTaskDetailsDrawer = (task) => {
         setTaskDetails(task)
         setOpenTaskDetailsDrawer(true);
     };
+
     const showMessageDrawer = () => {
         setOpenCreateTaskDrawer(true);
     };
@@ -50,11 +64,20 @@ function TaskPage() {
         setTaskDetails(null)
         setOpenTaskDetailsDrawer(false);
     };
+
     const closeMessageDrawer = () => {
         setOpenCreateTaskDrawer(false);
     };
+
     const handleCreateTask = (input) => {
         console.log(input)
+    }
+
+    const handleCreateTaskComment = (input) => {
+        const commentText = input.commentText
+        addCommentToTask(commentText, 1, taskDetails.id)
+        getTasks()
+        setTaskDetails(tasks.find(task => task.id === taskDetails.id))
     }
 
     return (<Card title={'Задачи'}>
@@ -66,8 +89,9 @@ function TaskPage() {
                 <TaskDrawer onClose={closeMessageDrawer} open={openCreateTaskDrawer}
                             handleCreateTask={handleCreateTask}/>}
             {openTaskDetailsDrawer &&
-                <TaskDetailsDrawer task={taskDetails} onClose={closeTaskDetailsDrawer} open={openTaskDetailsDrawer}/>}
-            {tasks && <TaskTable showTaskDetailsDrawer={showTaskDetailsDrawer} tasks={tasks}/>}
+                <TaskDetailsDrawer task={taskDetails} onClose={closeTaskDetailsDrawer} open={openTaskDetailsDrawer}
+                                   handleCreateTaskComment={handleCreateTaskComment}/>}
+            <TaskTable showTaskDetailsDrawer={showTaskDetailsDrawer} tasks={tasks}/>
         </Space>
     </Card>)
 }

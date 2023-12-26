@@ -1,8 +1,7 @@
 import TableComponent from "../common/Table";
-import data from './Tasks.json';
 import {Button} from "antd";
 import moment, {Moment} from 'moment';
-import {useEffect, useState} from "react";
+import React, {useMemo, useState} from "react";
 
 function getColumns(showTaskDetailsDrawer) {
     return (
@@ -45,14 +44,11 @@ function getColumns(showTaskDetailsDrawer) {
     )
 }
 
-function TaskTable(props) {
-    const [state, setState] = useState(props.tasks)
-
-    useEffect(() => {
-        setState(props.tasks)
-    }, [props.tasks])
-    console.log(props.tasks)
-    return TableComponent(getColumns(props.showTaskDetailsDrawer), state, "id")
+function TaskTable({showTaskDetailsDrawer, tasks}) {
+    console.log(tasks)
+    return (
+        TableComponent(getColumns(showTaskDetailsDrawer), tasks, "id")
+    )
 }
 
 export default TaskTable
