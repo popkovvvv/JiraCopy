@@ -8,7 +8,7 @@ import UserPage from "../../pages/UserPage";
 
 function HeaderComponent() {
     return (
-        <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+        <Space direction="vertical" size="middle" style={{display: 'flex'}}>
             <Header className="header" style={{backgroundColor: '#ffffff'}}>
                 <div style={{display: 'flex'}}>
                     <Menu theme="light"
